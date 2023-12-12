@@ -1,18 +1,16 @@
-// Profile.js
 import React from "react";
 import { useSelector } from "react-redux";
-import moment from "moment"; 
+import moment from "moment";
+import "./Profile.css";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
 
   return (
-    <div>
+    <div className="container">
       <h2>My Profile</h2>
-      <div>
-        <p>First Name: {user?.firstName}</p>
-        <p>Middle Name: {user?.middleName}</p>
-        <p>Last Name: {user?.lastName}</p>
+      <div className="profile-info">
+        <p>First Name: {user?.name}</p>
         <p>Age: {user?.age}</p>
         <p>Gender: {user?.gender}</p>
         <p>Date of Birth: {moment(user?.birthday).format("YYYY-MM-DD")}</p>
@@ -22,7 +20,6 @@ const Profile = () => {
         <p>Address: {user?.address}</p>
         <p>Email: {user?.email}</p>
         <p>Contact Number: {user?.contactNumber}</p>
-
       </div>
     </div>
   );

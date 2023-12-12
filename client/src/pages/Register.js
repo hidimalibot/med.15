@@ -1,113 +1,87 @@
+// Register.js
+import { Button, Form, Input } from "antd";
 import React from "react";
-import "../styles/RegiserStyles.css";
-import { Form, Input, message } from "antd";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { showLoading, hideLoading } from "../redux/features/alertSlice";
-
+import axios from "axios";
+import toast from "react-hot-toast";
+import { hideLoading, showLoading } from "../redux/alertsSlice";
 import back from '../pic/back.png';
 import logooo from '../pic/logo2.png';
 
-const Register = () => {
-  const navigate = useNavigate();
+function Register() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // form handler
-  const onFinishHandler = async (values) => {
+  const onFinish = async (values) => {
     try {
       dispatch(showLoading());
-
-      // Assuming your backend returns a verification token
-      const res = await axios.post("/api/v1/user/register", values);
+      const response = await axios.post("/api/user/register", values);
       dispatch(hideLoading());
 
-      if (res.data.success) {
-        message.success("Please check your email for verification.");
+      if (response.data.success) {
+        toast.success(response.data.message);
         navigate("/login");
       } else {
-        message.error(res.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       dispatch(hideLoading());
-      console.log(error);
-      message.error("Something Went Wrong");
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <>
-      <div className="form-container ">
-        <Form layout="vertical" onFinish={onFinishHandler} className="register-form">
-          <div className='img-logooo'>
-            <img src={logooo} alt="Medsync Logo" className='logo'/>
-          </div>
-          <h3 className="text-center">Sign Up</h3>
-          <Form.Item label="Name" name="name">
-            <Input type="text" required />
-          </Form.Item>
-          <Form.Item label="Email" name="email">
-            <Input type="email" required />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please enter your password!",
-              },
-              {
-                min: 8,
-                message: "Password must be at least 8 characters long!",
-              },
-            ]}
-          >
-            <Input type="password" />
-            </Form.Item>
-          <Form.Item label="First Name" name="firstName">
-            <Input type="text" required />
-          </Form.Item>
-          <Form.Item label="Middle Name" name="middleName">
-            <Input type="text" />
-          </Form.Item>
-          <Form.Item label="Last Name" name="lastName">
-            <Input type="text" required />
-          </Form.Item>
-          <Form.Item label="Address" name="address">
-            <Input type="text" required />
-          </Form.Item>
-          <Form.Item label="Gender" name="gender">
-            <Input type="text" required />
-          </Form.Item>
-          <Form.Item label="Age" name="age">
-            <Input type="number" required />
-          </Form.Item>
-          <Form.Item label="Height" name="height">
-            <Input type="number" required />
-          </Form.Item>
-          <Form.Item label="Weight" name="weight">
-            <Input type="number" required />
-          </Form.Item>
-          <Form.Item label="Birthday" name="birthday">
-            <Input type="date" required />
-          </Form.Item>
-          <Form.Item label="Blood Type" name="bloodType">
-            <Input type="text" required />
-          </Form.Item>
-          <Link to="/login" className="m-2">
-            Have an account?
-          </Link>
-          <button className="btn btn-primary" type="submit">
-            Sign Up
-          </button>
-        </Form>
-        <div className='back-image'>
-          <img src={back} alt="Medsync Logo" className='back'/>
+    <div className="authentication">
+      <Form layout="vertical" onFinish={onFinish} className="authentication-form">
+        <div className='img-logooo'>
+          <img src={logooo} alt="Medsync Logo" className='logo'/>
         </div>
+        <Form.Item label="Name" name="name">
+          <Input placeholder="Name" />
+        </Form.Item>
+        <Form.Item label="Email" name="email">
+          <Input placeholder="Email" />
+        </Form.Item>
+        <Form.Item label="Password" name="password">
+          <Input placeholder="Password" type="password" />
+        </Form.Item>
+        <Form.Item label="Age" name="age">
+          <Input placeholder="Age" type="number" />
+        </Form.Item>
+        <Form.Item label="Gender" name="gender">
+          <Input placeholder="Gender" />
+        </Form.Item>
+        <Form.Item label="Address" name="address">
+          <Input placeholder="Address" />
+        </Form.Item>
+        <Form.Item label="Blood Type" name="bloodType">
+          <Input placeholder="Blood Type" />
+        </Form.Item>
+        <Form.Item label="Weight" name="weight">
+          <Input placeholder="Weight" type="number" />
+        </Form.Item>
+        <Form.Item label="Height" name="height">
+          <Input placeholder="Height" type="number" />
+        </Form.Item>
+        <Form.Item label="Birthday" name="birthday">
+          <Input placeholder="Birthday" type="date" />
+        </Form.Item>
+        <Form.Item label="Phone Number" name="phoneNumber">
+          <Input placeholder="Phone Number" />
+        </Form.Item>
+        <Button className="primary-button my-2 full-width-button" htmlType="submit">
+          REGISTER
+        </Button>
+        <Link to="/login" className="anchor mt-2">
+          CLICK HERE TO LOGIN
+        </Link>
+      </Form>
+      <div className='back-image'>
+        <img src={back} alt="Medsync Logo" className='back'/>
       </div>
-    </>
+    </div>
   );
-};
+}
 
 export default Register;
